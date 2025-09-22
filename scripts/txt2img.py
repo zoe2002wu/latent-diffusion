@@ -141,6 +141,8 @@ if __name__ == "__main__":
                                                  verbose=False,
                                                  unconditional_guidance_scale=opt.scale,
                                                  unconditional_conditioning=uc,
+                                                 riemann=1,
+                                                 penalty_param=100,
                                                  eta=opt.ddim_eta)
 
                 x_samples_ddim = model.decode_first_stage(samples_ddim)
