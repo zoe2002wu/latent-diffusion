@@ -208,10 +208,10 @@ class DDIMSampler(object):
             guidance_signal = e_t - e_t_uncond
             G_inv = metric_tensor(guidance_signal)
 
-            e_t = e_t_uncond + unconditional_guidance_scale * mm(G_inv, guidance_signal)
+            e_t = e_t + unconditional_guidance_scale * mm(G_inv, guidance_signal)
             
-            eigvals, eigvh = torch.linalg.eigh(G_inv)
-            print(f"Riemann: t {t.mean().item()} x_t var {x.var().item()} G inv eigvals {eigvals.mean().item()} penalty param {penalty_param}")
+            # eigvals, eigvh = torch.linalg.eigh(G_inv)
+            # print(f"Riemann: t {t} x_t var {x.var().item()} G inv eigvals {eigvals.mean().item()} penalty param {penalty_param}")
 
         else:
             x_in = torch.cat([x] * 2)
@@ -219,7 +219,7 @@ class DDIMSampler(object):
             c_in = torch.cat([unconditional_conditioning, c])
             e_t_uncond, e_t = self.model.apply_model(x_in, t_in, c_in).chunk(2)
 
-            e_t = e_t_uncond + unconditional_guidance_scale * (e_t - e_t_uncond)
+            e_t = e_t + unconditional_guidance_scale * (e_t - e_t_uncond)
 
 
         if score_corrector is not None:
